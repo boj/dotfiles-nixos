@@ -18,7 +18,7 @@ import XMonad.Util.Run (spawnPipe)
 
 myStartupHook = setDefaultCursor xC_pirate
 
-myWorkspaces = ["\xf22d", "\xf224", "\xf222", "\xf227", "\xf22b", "\xf223", "\xf22c", "\xf225", "\xf221"]
+myWorkspaces = fmap show [1..9]
 
 myManageHook =
   composeAll [ resource =? "firefox" --> doShift (myWorkspaces !! 1)
@@ -30,9 +30,9 @@ myManageHook =
 myLogHook xmproc = 
   dynamicLogWithPP $ xmobarPP
     { ppOutput  = hPutStrLn xmproc
-    , ppTitle   = xmobarColor "#268bd2" "" . shorten 50
-    , ppCurrent = xmobarColor "#c0c0c0" "" . wrap "" ""
-    , ppSep     = xmobarColor "#dc322f" "" " : "
+    , ppTitle   = xmobarColor "#f2361e" "" . shorten 50
+    , ppCurrent = xmobarColor "#df9767" "" . wrap "" ""
+    , ppSep     = xmobarColor "#ffffff" "" " : "
     , ppUrgent  = xmobarColor "#dc322f" ""
     , ppLayout  = const ""
     }
