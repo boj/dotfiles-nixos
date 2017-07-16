@@ -1,26 +1,26 @@
-Config { font = "xft:Hack:size=8:antialias=true"
+Config { font = "xft:Knack Nerd Font:size=8,FontAwesome:size=9"
        , bgColor = "black"
        , fgColor = "white"
        , position = Top
        , lowerOnStart = True
        , commands = [ Run Network "enp0s3"
-                                  [ "-t", "<fc=#859900><rx> ↓</fc> <fc=#dc322f><tx> ↑</fc>"
+                                  [ "-t", "<fc=#859900><rx> \xf01a</fc> <fc=#dc322f><tx> \xf01b</fc>"
                                   ,"-S","True"
                                   ] 10
-                    , Run DynNetwork [ "-t", "<fc=#859900><rx> ↓</fc> <fc=#dc322f><tx> ↑</fc>"
+                    , Run DynNetwork [ "-t", "<fc=#859900><rx> \xf01a</fc> <fc=#dc322f><tx> \xf01b</fc>"
                                      , "-S","True"
                                      ] 10
-                    , Run MultiCpu [ "-t", "C: <total>%"
+                    , Run MultiCpu [ "-t", "\xf080 <total>%"
                                    , "-H", "50"
                                    , "--high", "#dc322f"
                                    ] 10
-                    , Run Memory [ "-t", "M: <usedratio>%"
+                    , Run Memory [ "-t", "\xf2db <usedratio>%"
                                  , "-H", "80"
                                  , "--high", "#dc322f"
                                  ] 10
-                    , Run Date "%_d %b %H:%M" "date" 10
+                    , Run Date "\xf073 %a %b %_d \xf017 %H:%M " "date" 10
                     , Run BatteryP ["BAT0"]
-                                   [ "-t", "B: <left>%"
+                                   [ "-t", "\xf240 <left>%"
                                    , "-L", "10"
                                    , "-H", "80"
                                    , "-p", "3"
@@ -37,5 +37,5 @@ Config { font = "xft:Hack:size=8:antialias=true"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %battery% %multicpu% %memory% | %dynnetwork% | %date%"
+       , template = "%StdinReader% }{ %dynnetwork% | %multicpu% %memory% %battery% | %date%"
        }

@@ -6,6 +6,11 @@ import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 
+import XMonad.Layout.Circle
+import XMonad.Layout.Mosaic
+import XMonad.Layout.NoBorders
+import XMonad.Layout.Spacing
+
 import XMonad.Util.Cursor
 import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Util.SpawnOnce (spawnOnce)
@@ -13,7 +18,7 @@ import XMonad.Util.Run (spawnPipe)
 
 myStartupHook = setDefaultCursor xC_pirate
 
-myWorkspaces = ["α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι"]
+myWorkspaces = ["\xf22d", "\xf224", "\xf222", "\xf227", "\xf22b", "\xf223", "\xf22c", "\xf225", "\xf221"]
 
 myManageHook =
   composeAll [ resource =? "firefox" --> doShift (myWorkspaces !! 1)
@@ -32,11 +37,11 @@ myLogHook xmproc =
     , ppLayout  = const ""
     }
 
-myLayoutHook = avoidStruts $ layoutHook defaultConfig
+myLayoutHook = noBorders Full ||| Circle ||| mosaic 2 [3,2]
 
 myKeys = 
-  [ ((mod1Mask .|. controlMask, xK_j), spawn "amixer -q set Master 10%-")
-  , ((mod1Mask .|. controlMask, xK_k), spawn "amixer -q set Master 10%+")
+  [ ((mod1Mask .|. controlMask, xK_j), spawn "amixer -q set Master 5%-")
+  , ((mod1Mask .|. controlMask, xK_k), spawn "amixer -q set Master 5%+")
   ]
 
 main = do
@@ -50,7 +55,7 @@ main = do
     , manageHook         = manageHook defaultConfig <+> myManageHook
     , startupHook        = myStartupHook
     , workspaces         = myWorkspaces
-    , layoutHook         = myLayoutHook
+    , layoutHook         = avoidStruts $ spacing 10 $ myLayoutHook
     , logHook            = myLogHook xmproc
     }
     `additionalKeys`

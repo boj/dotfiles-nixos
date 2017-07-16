@@ -3,6 +3,8 @@ set -x PATH $PATH $HOME/.local/bin
 set -x LC_ALL en_US.UTF-8
 set -x LANG en_US.UTF-8
 
+set -x EDITOR vim
+
 if not pgrep -x gpg-agent > /dev/null
   gpg-agent --homedir $HOME/.gnupg --daemon --enable-ssh-support
 end
