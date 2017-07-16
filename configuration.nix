@@ -21,9 +21,12 @@
 
   time.timeZone = "Asia/Tokyo";
 
-  nixpkgs.config.allowUnfree = true;
-
-  hardware.pulseaudio.enable = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    permittedInsecurePackages = [
+      "webkitgtk-2.4.11"
+    ];
+  };
 
   environment.systemPackages = with pkgs; [
     # system
@@ -47,7 +50,8 @@
     # haskell
     (haskellPackages.ghcWithPackages (self : [
        self.alex
-       self.apply-refact
+       #self.apply-refact
+       (pkgs.haskell.lib.dontCheck self.dbmigrations-postgresql)
        self.happy
        self.hledger
        self.hlint
@@ -92,7 +96,8 @@
     # wm
     dmenu
     dunst
-    taffybar
+    feh
+    #taffybar
 
     # utils
     aspell
@@ -100,6 +105,7 @@
     curl
     fzf
     htop
+    iftop
     tree
     unclutter
     wget
@@ -108,6 +114,11 @@
   services = {
     pcscd.enable = true;
 
+    postgresql = {
+      enable = true;
+      enableTCPIP = true;
+    };
+
     xserver = {
       enable = true;
       layout = "jp";
@@ -115,9 +126,9 @@
       windowManager.xmonad = {
         enable = true;
         enableContribAndExtras = true;
-        extraPackages = haskellPackages: [
-          haskellPackages.taffybar
-        ];
+        #extraPackages = haskellPackages: [
+        #  haskellPackages.taffybar
+        #];
       };
       desktopManager = {
         xterm.enable = false;
@@ -148,10 +159,14 @@
       fira
       fira-code
       fira-mono
+      font-awesome-ttf
       freefont_ttf
       hack-font
       iosevka
       ipafont
+      nerdfonts
+      powerline-fonts
+      terminus_font_ttf
       unifont
     ];
   };
