@@ -38,7 +38,8 @@
     open-vm-tools
 
     # audio
-    ponymix
+    alsaTools
+    alsaUtils
 
     # editor
     emacs
@@ -90,6 +91,7 @@
     w3m
 
     # chat
+    python27Packages.rainbowstream
     slack
     weechat
 
@@ -141,14 +143,21 @@
         };
       };
     };
+
+    udev.packages = [
+      pkgs.libu2f-host
+      pkgs.yubikey-personalization
+    ];
   };
 
-  services.udev.packages = [
-    pkgs.libu2f-host
-    pkgs.yubikey-personalization
-  ];
+  i18n.inputMethod = {
+    enabled = "fcitx";
+    fcitx.engines = with pkgs.fcitx-engines; [ mozc ];
+  };
 
-  programs.fish.enable = true;
+  programs = {
+    fish.enable = true;
+  };
 
   fonts = {
     enableFontDir = true;
