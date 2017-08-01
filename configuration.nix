@@ -35,11 +35,16 @@
     usbutils
 
     # virtualization
+    docker_compose
+    habitat
     open-vm-tools
 
     # audio
     alsaTools
     alsaUtils
+
+    # video
+    vlc
 
     # editor
     emacs
@@ -84,7 +89,6 @@
     firefox
 
     # mail
-    davmail
     isync
     msmtp
     mu
@@ -108,6 +112,7 @@
     fzf
     htop
     iftop
+    scrot
     tree
     unclutter
     wget
@@ -171,6 +176,7 @@
       font-awesome-ttf
       freefont_ttf
       hack-font
+      hasklig
       iosevka
       ipafont
       nerdfonts
@@ -181,6 +187,7 @@
   };
 
   virtualisation = {
+    docker.enable = true;
     virtualbox.guest.enable = true;
   };
 

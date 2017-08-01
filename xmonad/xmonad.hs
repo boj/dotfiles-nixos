@@ -19,7 +19,7 @@ import XMonad.Util.Run (spawnPipe)
 
 myStartupHook = do
   setDefaultCursor xC_pirate
-  spawnOnce "sh .fehbg"
+  spawn "sh .fehbg"
 
 myWorkspaces = fmap show [1..9]
 
@@ -51,9 +51,9 @@ main = do
   xmproc <- spawnPipe "xmobar ~/.xmonad/xmobar.hs"
   xmonad $ defaultConfig
     { terminal           = "urxvt"
-    , borderWidth        = 1
-    , normalBorderColor  = "#7c7c7c"
-    , focusedBorderColor = "#ffb6b0"
+    , borderWidth        = 2
+    , normalBorderColor  = "#000000"
+    , focusedBorderColor = "#df9767"
     , handleEventHook    = docksEventHook <> handleEventHook defaultConfig
     , manageHook         = manageHook defaultConfig <+> myManageHook
     , startupHook        = myStartupHook

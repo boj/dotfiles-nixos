@@ -3,10 +3,7 @@ Config { font = "xft:Knack Nerd Font:size=8,FontAwesome:size=9"
        , fgColor = "#ffffff"
        , position = Top
        , lowerOnStart = True
-       , commands = [ Run DynNetwork [ "-t", "<fc=green>\xf01a <rx></fc> <fc=red>\xf01b <tx></fc>"
-                                     , "-S","True"
-                                     ] 10
-                    , Run MultiCpu [ "-t", "<fc=#df9767>\xf080 <total>%</fc>"
+       , commands = [ Run MultiCpu [ "-t", "<fc=#df9767>\xf080 <total>%</fc>"
                                    , "-H", "50"
                                    , "--high", "#dc322f"
                                    ] 10
@@ -26,10 +23,10 @@ Config { font = "xft:Knack Nerd Font:size=8,FontAwesome:size=9"
                                    , "-L", "-15" , "-H", "-5"
                                    , "-l", "red" , "-m", "blue" , "-h", "green"
                                    ] 600
-                    , Run Date "<fc=#f2361e>\xf073 %a %b %_d</fc> <fc=#b1b1b1>\xf017 %H:%M</fc>" "date" 10
+                    , Run Date "<fc=#f2361e>\xf073 %a %b %_d \xf017 %H:%M</fc>" "date" 10
                     , Run StdinReader
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = " %date% : %StdinReader% }{ %dynnetwork%  %multicpu%  %memory%  %disku%  %default:Master%  %battery% "
+       , template = " %StdinReader% }{ %multicpu%  %memory%  %disku%  %default:Master%  %battery%  %date% "
        }

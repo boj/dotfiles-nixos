@@ -1,4 +1,4 @@
-Emacs.font: Hack-12:antialias=true:hinting=true:autohint=false:hintstyle=3
+Emacs.font: Knack Nerd Font-12:antialias=true:hinting=true:autohint=false:hintstyle=3
 
 Xft.dpi: 96
 Xft.antialias: true
@@ -20,7 +20,6 @@ URxvt.secondaryScreen: 1
 URxvt.secondaryScroll: 0
 
 ! Links
-URxvt.perl-ext-common: default,matcher
 URxvt.url-launcher: /run/current-system/sw/bin/xdg-open
 URxvt.matcher.button: 1
 URxvt.urlLauncher: firefox
@@ -48,38 +47,38 @@ URxvt.keysym.Shift-Control-C: perl:clipboard:copy
 URxvt.keysym.Shift-Control-V: perl:clipboard:paste
 
 ! special
-*.foreground:   #ffffff
-*.background:   #111111
-*.cursorColor:  #ffffff
+*.foreground:   #919191
+*.background:   #000000
+*.cursorColor:  #919191
 
 ! black
-*.color0:       #131313
-*.color8:       #d1d1d1
+*.color0:       #303030
+*.color8:       #5e5e5e
 
 ! red
-*.color1:       #2d2d2d
-*.color9:       #d2c3ad
+*.color1:       #c10023
+*.color9:       #ff8781
 
 ! green
-*.color2:       #4c3a3d
-*.color10:      #df9767
+*.color2:       #a83334
+*.color10:      #ffa095
 
 ! yellow
-*.color3:       #4e4e4e
-*.color11:      #e1e1e1
+*.color3:       #b51d2c
+*.color11:      #ff948b
 
 ! blue
-*.color4:       #6f6f6f
-*.color12:      #ededed
+*.color4:       #8c4b46
+*.color12:      #feb2aa
 
 ! magenta
-*.color5:       #909090
-*.color13:      #ed4b19
+*.color5:       #7d534f
+*.color13:      #ebbbb5
 
 ! cyan
-*.color6:       #aaa998
-*.color14:      #f2361e
+*.color6:       #9a413d
+*.color14:      #ffaaa0
 
 ! white
-*.color7:       #b1b1b1
-*.color15:      #fa390f
+*.color7:       #c6c6c6
+*.color15:      #ffffff

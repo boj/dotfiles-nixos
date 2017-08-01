@@ -34,7 +34,7 @@
 
      ;; languages
      emacs-lisp
-     extra-langs
+     major-modes
      (haskell :variables haskell-process-type 'ghci)
      shell-scripts
      sql
@@ -43,7 +43,8 @@
      finance
      (mu4e :variables
            mu4e-installation-path "/run/current-system/sw/share/emacs/site-lisp/mu4e"
-           mu4e-enable-notifications t)
+           mu4e-enable-notifications t
+           mu4e-enable-mode-line t)
      )
    dotspacemacs-additional-packages '(wttrin)
    ;; A list of packages and/or extensions that will not be install and loaded.
@@ -113,12 +114,12 @@
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(wilson badwolf)
+   dotspacemacs-themes '(spacemacs-dark)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Hack"
+   dotspacemacs-default-font '("Knack Nerd Font"
                                :size 12
                                :weight normal
                                :width normal
@@ -334,13 +335,14 @@
   (setq haskell-indent 2)
 
   ;; org-mode
-  (setq org-startup-truncated nil)
-  ;;(setq org-bullets-bullet-list '("■" "◆" "▲" "▶"))
-  (setq org-agenda-window-setup 'current-window)
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "ACTIVE(a)" "ONHOLD(h@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
-  (setq org-fontify-done-headline t)
-  (setq spaceline-org-clock-p t)
+  (with-eval-after-load 'org
+    (setq org-startup-truncated nil)
+    ;;(setq org-bullets-bullet-list '("■" "◆" "▲" "▶"))
+    (setq org-agenda-window-setup 'current-window)
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "ACTIVE(a)" "ONHOLD(h@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
+    (setq org-fontify-done-headline t)
+    (setq spaceline-org-clock-p t))
 
   ;; hledger
   (setq ledger-mode-should-check-version nil
@@ -348,111 +350,83 @@
         ledger-binary-path "hledger")
 
   ;; mu4e
-  (setq mu4e-mu-binary "/run/current-system/sw/bin/mu"
-        mu4e-attachment-dir  "~/Downloads"
-        mu4e-maildir "~/.mail"
-        mu4e-get-mail-command "mbsync -a"
-        mu4e-update-interval 30
-        mu4e-compose-signature-auto-include nil
-        mu4e-html2text-command "w3m -dump -T text/html"
-        mu4e-view-prefer-html t
-        mu4e-view-show-images t
-        mu4e-view-show-addresses t
-        mu4e-hide-index-messages t
-        mu4e-headers-auto-update t
-        mu4e-headers-include-related nil
-        mu4e-headers-skip-duplicates t
-        mu4e-compose-dont-reply-to-self t
-        mu4e-sent-messages-behavior 'delete
-        mu4e-split-view 'horizontal
-        mu4e-show-images t
-        message-cite-reply-position 'above
-        message-kill-buffer-on-exit t
-        mu4e-index-update-error-warning nil)
-  ;;(setq mu4e-contexts
-  ;;      `(,(make-mu4e-context
-  ;;          :name "gmail"
-  ;;          :enter-func (lambda () (mu4e-message "Switch to the gmail context"
-  ;;                                  mu4e-refile-folder "/gmail/.all"
-  ;;                                  mu4e-drafts-folder "/gmail/.drafts"
-  ;;                                  mu4e-sent-folder   "/gmail/.sent"
-  ;;                                  mu4e-maildir-shortcuts
-  ;;                                  '(("/gmail/INBOX"   . ?i)
-  ;;                                    ("/gmail/.all"    . ?a)
-  ;;                                    ("/gmail/.sent"   . ?s)
-  ;;                                    ("/gmail/.drafts" . ?d)))
-  ;;          ;; leave-func not defined
-  ;;          :match-func (lambda (msg)
-  ;;                        (when msg
-  ;;                          (or
-  ;;                           (mu4e-message-contact-field-matches
-  ;;                            msg '(:to :cc :bcc)
-  ;;                            "mojobojo@gmail.com"))))
-  ;;          :vars '((user-mail-address . "mojobojo@gmail.com")
-  ;;                  (user-full-name	   . "Brian Jones")))
-  ;;        ,(make-mu4e-context
-  ;;          :name "uncannyworks"
-  ;;          :enter-func (lambda () (mu4e-message "Switch to the uncannyworks context"
-  ;;                                  mu4e-refile-folder "/uncannyworks/.all"
-  ;;                                  mu4e-drafts-folder "/uncannyworks/.drafts"
-  ;;                                  mu4e-sent-folder   "/uncannyworks/.sent"
-  ;;                                  mu4e-maildir-shortcuts
-  ;;                                  '(("/uncannyworks/INBOX"   . ?i)
-  ;;                                    ("/uncannyworks/.all"    . ?a)
-  ;;                                    ("/uncannyworks/.sent"   . ?s)
-  ;;                                    ("/uncannyworks/.drafts" . ?d)))
-  ;;          ;; leave-func not defined
-  ;;          :match-func (lambda (msg)
-  ;;                        (when msg
-  ;;                          (or
-  ;;                           (mu4e-message-contact-field-matches
-  ;;                            msg '(:to :cc :bcc)
-  ;;                            "brian.jones@uncannyworks.com"))))
-  ;;        :vars '((user-mail-address . "brian.jones@uncannyworks.com")
-  ;;                (user-full-name	  . "Brian Jones")))))))
-  (setq mu4e-account-alist
-        '(("gmail"
-           (mu4e-refile-folder "/gmail/.all")
-           (mu4e-sent-folder "/gmail/.sent")
-           (mu4e-drafts-folder "/gmail/.drafts")
-           (mu4e-trash-folder "/gmail/.all")
-           (mu4e-reply-to-address "mojobojo@gmail.com")
-           (user-mail-address "mojobojo@gmail.com")
-           (user-full-name "Brian Jones"))
-          ("uncannyworks"
-           (mu4e-refile-folder "/uncannyworks/.all")
-           (mu4e-sent-folder "/uncannyworks/.sent")
-           (mu4e-drafts-folder "/uncannyworks/.drafts")
-           (mu4e-trash-folder "/uncannyworks/.all")
-           (mu4e-reply-to-address "brian.jones@uncannyworks.com")
-           (user-mail-address "brian.jones@uncannyworks.com")
-           (user-full-name "Brian Jones"))))
-  (setq mu4e-maildir-shortcuts
-        '(("/gmail/INBOX"   . ?i)
-          ("/gmail/.all"    . ?a)
-          ("/gmail/.sent"   . ?s)
-          ("/gmail/.drafts" . ?d)
-          ("/uncannyworks/INBOX"   . ?1)
-          ("/uncannyworks/.all"    . ?2)
-          ("/uncannyworks/.sent"   . ?3)
-          ("/uncannyworks/.drafts" . ?4)))
-  (mu4e/mail-account-reset)
-  (setq message-send-mail-function 'message-send-mail-with-sendmail
-        sendmail-program "msmtp")
-  (add-hook 'mu4e-compose-mode-hook 'flyspell-mode)
-  (require 'gnus-dired)
-  (defun gnus-dired-mail-buffers ()
-    "Return a list of active message buffers."
-    (let (buffers)
-      (save-current-buffer
-        (dolist (buffer (buffer-list t))
-          (set-buffer buffer)
-          (when (and (derived-mode-p 'message-mode)
-                     (null message-sent-message-via))
-            (push (buffer-name buffer) buffers))))
-      (nreverse buffers)))
-  (setq gnus-dired-mail-mode 'mu4e-user-agent)
-  (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
+  ;;(setq mu4e-mu-binary "/run/current-system/sw/bin/mu"
+  ;;      mu4e-maildir "~/.mail"
+  ;;      mu4e-attachment-dir  "~/Downloads"
+  ;;      mu4e-get-mail-command "mbsync -a"
+  ;;      mu4e-update-interval 30
+  ;;      mu4e-compose-signature-auto-include nil
+  ;;      mu4e-html2text-command "w3m -dump -T text/html"
+  ;;      mu4e-view-prefer-html t
+  ;;      mu4e-view-show-images t
+  ;;      mu4e-view-show-addresses t
+  ;;      mu4e-hide-index-messages t
+  ;;      mu4e-headers-auto-update t
+  ;;      mu4e-headers-include-related nil
+  ;;      mu4e-headers-skip-duplicates t
+  ;;      mu4e-compose-dont-reply-to-self t
+  ;;      mu4e-sent-messages-behavior 'delete
+  ;;      mu4e-split-view 'horizontal
+  ;;      mu4e-show-images t
+  ;;      message-cite-reply-position 'above
+  ;;      message-kill-buffer-on-exit t
+  ;;      mu4e-index-update-error-warning nil)
+  ;;(with-eval-after-load 'mu4e
+  ;;  (add-hook 'mu4e-compose-mode-hook 'flyspell-mode)
+  ;;  (setq mu4e-contexts
+  ;;        `(,(make-mu4e-context
+  ;;            :name "gmail"
+  ;;            :enter-func (lambda () (mu4e-message "Switch to the gmail context"
+  ;;                                    mu4e-refile-folder "/gmail/.all"
+  ;;                                    mu4e-drafts-folder "/gmail/.drafts"
+  ;;                                    mu4e-sent-folder   "/gmail/.sent"
+  ;;                                    mu4e-maildir-shortcuts
+  ;;                                    '(("/gmail/INBOX"   . ?i)
+  ;;                                      ("/gmail/.all"    . ?a)
+  ;;                                      ("/gmail/.sent"   . ?s)
+  ;;                                      ("/gmail/.drafts" . ?d)))
+  ;;            :leave-func (lambda () mu4e-message "Left gmail context")
+  ;;            :match-func (lambda (msg)
+  ;;                          (when msg
+  ;;                            (mu4e-message-contact-field-matches msg
+  ;;                              :to "mojobojo@gmail.com")))
+  ;;            :vars '((user-mail-address . "mojobojo@gmail.com")
+  ;;                    (user-full-name	   . "Brian Jones")))
+  ;;          ,(make-mu4e-context
+  ;;            :name "uncannyworks"
+  ;;            :enter-func (lambda () (mu4e-message "Switch to the uncannyworks context"
+  ;;                                    mu4e-refile-folder "/uncannyworks/.all"
+  ;;                                    mu4e-drafts-folder "/uncannyworks/.drafts"
+  ;;                                    mu4e-sent-folder   "/uncannyworks/.sent"
+  ;;                                    mu4e-maildir-shortcuts
+  ;;                                    '(("/uncannyworks/INBOX"   . ?i)
+  ;;                                      ("/uncannyworks/.all"    . ?a)
+  ;;                                      ("/uncannyworks/.sent"   . ?s)
+  ;;                                      ("/uncannyworks/.drafts" . ?d)))
+  ;;            :leave-func (lambda () mu4e-message "Left uncannyworks context")
+  ;;            :match-func (lambda (msg)
+  ;;                          (when msg
+  ;;                            (mu4e-message-contact-field-matches msg
+  ;;                              :to "brian.jones@uncannyworks.com")))
+  ;;          :vars '((user-mail-address . "brian.jones@uncannyworks.com")
+  ;;                  (user-full-name	  . "Brian Jones"))))))))
+  ;;(with-eval-after-load 'mu4e-alert
+  ;;  (mu4e-alert-set-default-style 'notifications))
+  ;;(setq message-send-mail-function 'message-send-mail-with-sendmail
+  ;;      sendmail-program "msmtp")
+  ;;(require 'gnus-dired)
+  ;;(defun gnus-dired-mail-buffers ()
+  ;;  "Return a list of active message buffers."
+  ;;  (let (buffers)
+  ;;    (save-current-buffer
+  ;;      (dolist (buffer (buffer-list t))
+  ;;        (set-buffer buffer)
+  ;;        (when (and (derived-mode-p 'message-mode)
+  ;;                   (null message-sent-message-via))
+  ;;          (push (buffer-name buffer) buffers))))
+  ;;    (nreverse buffers)))
+  ;;(setq gnus-dired-mail-mode 'mu4e-user-agent)
+  ;;(add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
 
   ;; gpg
   ;;(setq epg-gpg-program "gpg2")
@@ -460,11 +434,11 @@
   ;;(add-hook 'mu4e-view-mode-hook 'epa-mail-mode)
 )
 
-;; Custom variables
-;; ----------------
-
-;; Do not write anything in this section. This is where Emacs will
-;; auto-generate custom variable definitions.
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -472,10 +446,11 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (mu4e-maildirs-extension mu4e-alert ht org-plus-contrib helm helm-core async ghc haskell-mode company counsel swiper smartparens evil flycheck ivy yasnippet markdown-mode alert dash s wttrin reveal-in-osx-finder pbcopy osx-trash osx-dictionary ledger-mode launchctl flycheck-ledger zonokai-theme zenburn-theme zen-and-art-theme yaml-mode xterm-color ws-butler wolfram-mode winum which-key wgrep web-mode volatile-highlights vi-tilde-fringe uuidgen use-package underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme tronesque-theme toxi-theme toml-mode toc-org thrift terraform-mode tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit sunny-day-theme sublime-themes subatomic256-theme subatomic-theme stan-mode sql-indent spaceline spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smex smeargle slim-mode shell-pop seti-theme scss-mode scad-mode sass-mode reverse-theme restart-emacs request rainbow-mode rainbow-identifiers rainbow-delimiters railscasts-theme racer qml-mode purple-haze-theme pug-mode professional-theme popwin planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme persp-mode pcre2el pastels-on-dark-theme paradox orgit organic-green-theme org-projectile org-present org-pomodoro org-download org-bullets open-junk-file omtose-phellack-theme omnisharp oldlace-theme occidental-theme obsidian-theme noctilux-theme nix-mode niflheim-theme neotree naquadah-theme mustang-theme multi-term move-text monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minimal-theme matlab-mode material-theme markdown-toc majapahit-theme magit-gitflow magit-gh-pulls madhat2r-theme macrostep lush-theme lua-mode lorem-ipsum linum-relative link-hint light-soap-theme less-css-mode julia-mode jinja2-mode jbeans-theme jazz-theme ivy-hydra ir-black-theme intero insert-shebang inkpot-theme info+ indent-guide ibuffer-projectile hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation hide-comnt heroku-theme hemisu-theme help-fns+ helm-make hc-zenburn-theme haskell-snippets gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-translate golden-ratio gnuplot gitignore-mode github-search github-clone github-browse-file gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gist gh-md gandalf-theme fuzzy flyspell-correct-ivy flycheck-rust flycheck-pos-tip flycheck-haskell flx-ido flatui-theme flatland-theme fish-mode firebelly-theme fill-column-indicator farmhouse-theme fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu espresso-theme eshell-z eshell-prompt-extras esh-help emoji-cheat-sheet-plus emmet-mode elisp-slime-nav dumb-jump dracula-theme django-theme define-word darktooth-theme darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme counsel-projectile company-web company-statistics company-shell company-nixos-options company-ghci company-ghc company-emoji company-cabal company-ansible column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-identifiers-mode cmm-mode clues-theme clean-aindent-mode cherry-blossom-theme cargo busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile arduino-mode apropospriate-theme anti-zenburn-theme ansible-doc ansible ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme adaptive-wrap ace-window ace-link ac-ispell))))
+    (wttrin web-mode use-package tao-theme spaceline powerline monokai-theme markdown-toc markdown-mode ledger-mode julia-mode ivy-hydra intero inkpot-theme hl-todo gruvbox-theme gruber-darker-theme google-translate flycheck-haskell evil-unimpaired evil-mc evil-matchit evil-ediff espresso-theme eshell-prompt-extras esh-help dumb-jump darktooth-theme darkokai-theme cyberpunk-theme color-theme-sanityinc-tomorrow alect-themes aggressive-indent ghc haskell-mode company counsel smartparens highlight evil undo-tree flycheck helm helm-core avy org-plus-contrib haml-mode ivy dash yasnippet zonokai-theme zenburn-theme zen-and-art-theme yaml-mode xterm-color ws-butler wolfram-mode winum white-sand-theme which-key wgrep volatile-highlights vi-tilde-fringe vala-snippets vala-mode uuidgen underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme tronesque-theme toxi-theme toc-org thrift tangotango-theme tango-plus-theme tango-2-theme tagedit symon swiper sunny-day-theme sublime-themes subatomic256-theme subatomic-theme string-inflection stan-mode sql-indent spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smex slim-mode shell-pop seti-theme scss-mode scad-mode sass-mode reverse-theme restart-emacs request rebecca-theme rainbow-delimiters railscasts-theme qml-mode purple-haze-theme pug-mode professional-theme popwin planet-theme pkgbuild-mode phoenix-dark-pink-theme phoenix-dark-mono-theme persp-mode pcre2el pastels-on-dark-theme password-generator paradox organic-green-theme org-projectile org-present org-pomodoro org-download org-bullets org-brain open-junk-file omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme niflheim-theme neotree naquadah-theme mustang-theme multi-term mu4e-maildirs-extension mu4e-alert move-text monochrome-theme molokai-theme moe-theme mmm-mode minimal-theme matlab-mode material-theme majapahit-theme madhat2r-theme macrostep lush-theme lorem-ipsum logcat linum-relative link-hint light-soap-theme less-css-mode kivy-mode jbeans-theme jazz-theme ivy-purpose ir-black-theme insert-shebang info+ indent-guide impatient-mode ibuffer-projectile hungry-delete hoon-mode hlint-refactor hindent highlight-parentheses highlight-numbers highlight-indentation hide-comnt heroku-theme hemisu-theme help-fns+ helm-make hc-zenburn-theme haskell-snippets grandshell-theme goto-chg gotham-theme golden-ratio gnuplot gh-md gandalf-theme fuzzy flyspell-correct-ivy flycheck-pos-tip flycheck-ledger flycheck-bashate flx-ido flatui-theme flatland-theme fish-mode firebelly-theme fill-column-indicator farmhouse-theme fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu eshell-z emojify emoji-cheat-sheet-plus emmet-mode elisp-slime-nav editorconfig ebuild-mode dracula-theme django-theme diminish define-word darkmine-theme darkburn-theme dante dakrone-theme counsel-projectile company-web company-statistics company-shell company-ghci company-ghc company-emoji company-cabal column-enforce-mode color-theme-sanityinc-solarized cmm-mode clues-theme clean-aindent-mode cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme bind-key badwolf-theme autothemer auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile arduino-mode apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme afternoon-theme adaptive-wrap ace-window ace-link ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+)
