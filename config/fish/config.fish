@@ -18,4 +18,5 @@ set fish_greeting
 
 if status --is-interactive
   cd
+  neofetch --config .config/neofetch/config.conf
 end

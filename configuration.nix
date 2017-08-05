@@ -108,10 +108,13 @@
     # utils
     aspell
     aspellDicts.en
+    bind
     curl
     fzf
     htop
     iftop
+    imagemagick
+    neofetch
     scrot
     tree
     unclutter
