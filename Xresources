@@ -19,6 +19,9 @@ URxvt.lineSpace: 0
 URxvt.secondaryScreen: 1
 URxvt.secondaryScroll: 0
 
+! Perl extensions
+URxvt.perl-ext-common: default,matcher,clipboard
+
 ! Links
 URxvt.url-launcher: /run/current-system/sw/bin/xdg-open
 URxvt.matcher.button: 1
@@ -42,7 +45,6 @@ URxvt.pointerBlank: true
 ! Enables copy/paste with Ctrl-Shift-C/V
 URxvt.iso14755: false
 URxvt.iso14755_52: false
-URxvt.perl-ext-common: default,clipboard
 URxvt.keysym.Shift-Control-C: perl:clipboard:copy
 URxvt.keysym.Shift-Control-V: perl:clipboard:paste
 
