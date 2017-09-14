@@ -124,9 +124,12 @@
     unclutter
     wget
     xorg.xbacklight
+    xscreensaver
   ];
 
   services = {
+    acpid.enable = true;
+
     pcscd.enable = true;
 
     postgresql = {
@@ -163,6 +166,13 @@
           enable = true;
           user = "bojo";
         };
+        sessionCommands = ''
+          xscreensaver -no-splash &
+        '';
+      };
+      xautolock = {
+        enable = true;
+        locker = "xscreensaver-command --lock";
       };
     };
 
