@@ -144,6 +144,8 @@
     xserver = {
       enable = true;
       layout = "jp";
+      videoDrivers = [ "nv" "intel" ];
+      xrandrHeads = [ "HDMI2" "eDP1" ];
       windowManager.default = "xmonad";
       windowManager.xmonad = {
         enable = true;
@@ -213,8 +215,8 @@
   };
 
   system.autoUpgrade.enable = true;
-  system.autoUpgrade.channel = https://nixos.org/channels/nixos-17.03;
-  system.stateVersion = "17.03";
+  system.autoUpgrade.channel = https://nixos.org/channels/nixos-17.09;
+  system.stateVersion = "17.09";
 
   nix.binaryCaches = [ "https://cache.nixos.org" "https://nixcache.reflex-frp.org" ];
   nix.binaryCachePublicKeys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
