@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
-{
+let
+  unstable = import <unstable> { config.allowUnfree = true; };
+in {
   imports =
     [
       ./hardware-configuration.nix
@@ -50,6 +52,10 @@
     # video
     vlc
 
+    # network
+    openconnect
+    openfortivpn
+
     # editor
     emacs
     vim
@@ -60,8 +66,9 @@
     # haskell
     (haskellPackages.ghcWithPackages (self : [
        self.alex
-       #self.apply-refact
+       self.apply-refact
        (pkgs.haskell.lib.dontCheck self.dbmigrations-postgresql)
+       self.ghcid
        self.happy
        self.hledger
        self.hlint
@@ -90,6 +97,7 @@
     xlsfonts
    
     # browser
+    chromium
     firefox
 
     # mail
@@ -105,15 +113,17 @@
 
     # wm
     dmenu
-    dunst
     feh
-    #taffybar
+    libnotify
+    notify-osd
 
     # utils
+    acpi
     aspell
     aspellDicts.en
     bind
     curl
+    fd
     fzf
     htop
     iftop
@@ -125,7 +135,12 @@
     wget
     xorg.xbacklight
     xscreensaver
+
+    # unstable
+    unstable.zoom-us
   ];
+
+  powerManagement.enable = true;
 
   services = {
     acpid.enable = true;
@@ -154,7 +169,6 @@
         enable = true;
         enableContribAndExtras = true;
         #extraPackages = haskellPackages: [
-        #  haskellPackages.taffybar
         #];
       };
       desktopManager = {

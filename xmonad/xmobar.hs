@@ -14,7 +14,7 @@ Config { font = "xft:Knack Nerd Font:size=8,FontAwesome:size=9"
                     , Run DiskU [("/", "<fc=#f1fa8c>\xf200 <used>/<size></fc>")]
                                 ["-L", "20", "-H", "50", "-m", "1", "-p", "3"] 20
                     , Run Volume "default" "Master" [ "-t", "\xf028 <volume>%" ] 10
-                    , Run BatteryP ["BAT0"]
+                    , Run BatteryP ["BAT0", "BAT1"]
                                    [ "-t", "<fc=#8be9fd>\xf240 <left>%</fc>"
                                    , "-L", "10" , "-H", "80" , "-p", "3"
                                    , "--"
