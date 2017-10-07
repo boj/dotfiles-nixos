@@ -66,7 +66,7 @@ myKeys =
   [ ((mod4Mask .|. shiftMask, xK_3), spawn "scrot")
   , ((mod4Mask .|. shiftMask, xK_4), spawn "sleep 1;scrot -s")
   ] ++
-  [ ((mod4Mask, xK_p), spawn "systemctl suspend")
+  [ ((mod4Mask .|. controlMask, xK_p), spawn "systemctl suspend")
   ]
 
 main = do

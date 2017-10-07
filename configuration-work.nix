@@ -44,6 +44,7 @@ in {
     habitat
     open-vm-tools
     synergy
+    vagrant
 
     # audio
     alsaTools
@@ -86,6 +87,10 @@ in {
     pcsctools
     pinentry_ncurses
     yubikey-personalization
+
+    kbfs
+    keybase-go
+    keybase-gui
 
     # terminal
     bash
@@ -133,6 +138,7 @@ in {
     tree
     unclutter
     wget
+    wpa_supplicant_gui
     xorg.xbacklight
     xscreensaver
 
@@ -144,6 +150,15 @@ in {
 
   services = {
     acpid.enable = true;
+
+    kbfs = {
+      enable = true;
+      mountPoint = "/keybase";
+      extraFlags = [
+          "-label kbfs"
+          "-mount-type normal"
+        ];
+    };
 
     pcscd.enable = true;
 
@@ -229,6 +244,7 @@ in {
 
   virtualisation = {
     docker.enable = true;
+    virtualbox.host.enable = true;
   };
 
   users.defaultUserShell = "/run/current-system/sw/bin/fish";
