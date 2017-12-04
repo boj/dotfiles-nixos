@@ -6,7 +6,7 @@ set -x LANG en_US.UTF-8
 set -x EDITOR vim
 
 if not pgrep -x gpg-agent > /dev/null
-  gpg-agent --homedir $HOME/.gnupg --daemon --enable-ssh-support
+  gpg-agent --homedir $HOME/.gnupg --daemon # --enable-ssh-support
 end
 
 set -u SSH_AGENT_PID
@@ -18,5 +18,5 @@ set fish_greeting
 
 if status --is-interactive
   cd
-  neofetch --config .config/neofetch/config.conf
+  neofetch
 end

@@ -8,6 +8,14 @@ in {
       ./hardware-configuration.nix
     ];
 
+  hardware = {
+    bluetooth.enable = true;
+    pulseaudio = {
+      enable = true;
+      package = pkgs.pulseaudioFull;
+    };
+  };
+
   boot.initrd.luks.devices = [ {
     name = "root";
     device = "/dev/nvme0n1p2";
@@ -31,6 +39,7 @@ in {
     permittedInsecurePackages = [
       "webkitgtk-u.4.11"
     ];
+    pulseaudio = true;
   };
 
   environment.systemPackages = with pkgs; [
@@ -47,8 +56,9 @@ in {
     vagrant
 
     # audio
-    alsaTools
-    alsaUtils
+    # alsaTools
+    # alsaUtils
+    pavucontrol
 
     # video
     vlc
@@ -121,6 +131,7 @@ in {
     feh
     libnotify
     notify-osd
+    polybar
 
     # utils
     acpi
@@ -139,6 +150,7 @@ in {
     unclutter
     wget
     wpa_supplicant_gui
+    xclip
     xorg.xbacklight
     xscreensaver
 
@@ -155,17 +167,16 @@ in {
       enable = true;
       mountPoint = "/keybase";
       extraFlags = [
-          "-label kbfs"
-          "-mount-type normal"
-        ];
+        "-label kbfs"
+      ];
     };
 
     pcscd.enable = true;
 
-    postgresql = {
-      enable = true;
-      enableTCPIP = true;
-    };
+    #postgresql = {
+    #  enable = true;
+    #  enableTCPIP = true;
+    #};
 
     synergy.client = {
       enable = true;
@@ -179,13 +190,18 @@ in {
       layout = "jp";
       videoDrivers = [ "nv" "intel" ];
       xrandrHeads = [ "HDMI2" "eDP1" ];
-      windowManager.default = "xmonad";
-      windowManager.xmonad = {
+      windowManager.default = "herbstluftwm";
+      windowManager.herbstluftwm = {
         enable = true;
-        enableContribAndExtras = true;
-        #extraPackages = haskellPackages: [
-        #];
+        configFile = "/home/bojo/.config/herbstluftwm/autostart";
       };
+      #windowManager.default = "xmonad";
+      #windowManager.xmonad = {
+      #  enable = true;
+      #  enableContribAndExtras = true;
+      #  #extraPackages = haskellPackages: [
+      #  #];
+      #};
       desktopManager = {
         xterm.enable = false;
         default = "none";
@@ -218,6 +234,11 @@ in {
 
   programs = {
     fish.enable = true;
+    #gnupg.agent = {
+    #  enable = true;
+    #  enableSSHSupport = true;
+    #};
+    ssh.startAgent = true;
   };
 
   fonts = {
