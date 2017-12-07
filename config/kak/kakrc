@@ -1,0 +1,32 @@
+#colorscheme dracula
+
+set-option global ui_options ncurses_assistant=cat
+
+set global tabstop 2
+set global indentwidth 2
+
+# replace ¥ with \
+hook global InsertChar ¥ %{ exec -draft -itersel <esc>hr\\i }
+
+# replace tab with spaces
+hook global InsertChar \t %{ exec -draft -itersel h@ }
+
+# highlight 80th column background gray
+hook global WinCreate .* %{
+  add-highlighter global column 80 default,rgb:404040
+}
+
+hook global WinSetOption filetype=haskell %{
+  set window lintcmd 'hlint'
+}
+
+hook global NormalKey y|d|c %{ nop %sh{
+  printf %s "$kak_reg_dquote" | xsel --input --clipboard
+}}
+
+map global user P '!xsel --output --clipboard<ret>'
+map global user p '<a-!>xsel --output --clipboard<ret>'
+
+def find -params 1 -shell-candidates %{ find -type f } %{ edit %arg{1} }
+
+def git-edit -params 1 -shell-candidates %{ git ls-files } %{ edit %arg{1} }

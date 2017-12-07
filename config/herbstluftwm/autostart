@@ -12,11 +12,26 @@ xsetroot -solid '#000000'
 
 # defaults
 pkill unclutter
-unclutter &
-pkill synergyc
-synergyc ahoyana
+unclutter -idle 2 -root &
+#pkill synergyc
+#synergyc ahoyana
+xmodmap ~/.Xmodmap
 setxkbmap jp
+xset r rate 200 20
 sh .fehbg
+
+#pkill polybar
+#if type "xrandr"; then
+#  for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
+#    MONITOR=$m polybar --reload top &
+#  done
+#else
+#  polybar --reload top &
+#fi
+
+# padding
+#hc pad 0 24 0 0 0
+#hc pad 1 24 0 0 0
 
 # remove all existing keybindings
 hc keyunbind --all
@@ -103,7 +118,7 @@ hc keybind $Mod-comma  use_index -1 --skip-visible
 hc keybind $Mod-r remove
 hc keybind $Mod-s floating toggle
 hc keybind $Mod-f fullscreen toggle
-hc keybind $Mod-p pseudotile toggle
+#hc keybind $Mod-p pseudotile toggle
 # The following cycles through the available layouts within a frame, but skips
 # layouts, if the layout change wouldn't affect the actual window positions.
 # I.e. if there are two windows within a frame, the grid layout is skipped.

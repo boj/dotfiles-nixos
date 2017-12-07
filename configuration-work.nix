@@ -10,7 +10,9 @@ in {
 
   hardware = {
     bluetooth.enable = true;
+    opengl.driSupport32Bit = true;
     pulseaudio = {
+      support32Bit = true;
       enable = true;
       package = pkgs.pulseaudioFull;
     };
@@ -62,6 +64,9 @@ in {
 
     # video
     vlc
+
+    # games
+    steam
 
     # network
     openconnect
@@ -141,10 +146,12 @@ in {
     curl
     fd
     fzf
+    ghostscript
     htop
     iftop
     imagemagick
     neofetch
+    qpdfview
     scrot
     tree
     unclutter
@@ -152,7 +159,10 @@ in {
     wpa_supplicant_gui
     xclip
     xorg.xbacklight
+    xorg.xev
+    xorg.xmodmap
     xscreensaver
+    xsel
 
     # unstable
     unstable.zoom-us
@@ -178,11 +188,18 @@ in {
     #  enableTCPIP = true;
     #};
 
-    synergy.client = {
+    #synergy.client = {
+    #  enable = true;
+    #  autoStart = false;
+    #  screenName = "honmaya";
+    #  serverAddress = "192.168.1.2:24800";
+    #};
+
+    synergy.server = {
       enable = true;
-      autoStart = false;
       screenName = "honmaya";
-      serverAddress = "192.168.1.2:24800";
+      address = "192.168.1.3";
+      autoStart = true;
     };
 
     xserver = {
@@ -256,6 +273,7 @@ in {
       hasklig
       iosevka
       ipafont
+      material-icons
       nerdfonts
       powerline-fonts
       terminus_font_ttf
@@ -278,6 +296,10 @@ in {
   system.autoUpgrade.enable = true;
   system.autoUpgrade.channel = https://nixos.org/channels/nixos-17.09;
   system.stateVersion = "17.09";
+
+  nix.gc.automatic = true;
+  nix.gc.dates = "weekly";
+  nix.gc.options = "--delete-older-than 30d";
 
   nix.binaryCaches = [ "https://cache.nixos.org" "https://nixcache.reflex-frp.org" ];
   nix.binaryCachePublicKeys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
