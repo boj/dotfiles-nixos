@@ -25,8 +25,16 @@ in {
   } ];
   boot.loader.systemd-boot.enable = true;
 
-  networking.wireless.enable = true;
-  networking.hostName = "honmaya";
+  networking = {
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 24800 ];
+      allowedUDPPorts = [ 24800 ];
+      allowPing = true;
+    };
+    hostName = "honmaya";
+    wireless.enable = true;
+  };
 
   i18n = {
     consoleFont = "Lat2-Terminus16";
@@ -72,10 +80,6 @@ in {
     openconnect
     openfortivpn
 
-    # editor
-    emacs
-    vim
-
     # development
     git
 
@@ -95,7 +99,7 @@ in {
     nix-prefetch-git
     stack
 
-    # pgp
+    # security
     gnupg
     libu2f-host
     opensc
@@ -115,28 +119,19 @@ in {
     # font
     xfontsel
     xlsfonts
-   
-    # browser
-    chromium
-    firefox
-
-    # mail
-    isync
-    msmtp
-    mu
-    w3m
-
+ 
     # chat
     python27Packages.rainbowstream
-    slack
     weechat
+
+    # work
+    libreoffice
 
     # wm
     dmenu
     feh
     libnotify
     notify-osd
-    polybar
 
     # utils
     acpi
@@ -155,6 +150,7 @@ in {
     scrot
     tree
     unclutter
+    w3m
     wget
     wpa_supplicant_gui
     xclip
@@ -165,6 +161,9 @@ in {
     xsel
 
     # unstable
+    unstable.discord
+    unstable.firefox
+    unstable.slack
     unstable.zoom-us
   ];
 
@@ -175,18 +174,20 @@ in {
 
     kbfs = {
       enable = true;
-      mountPoint = "/keybase";
+      mountPoint = "%h/keybase";
       extraFlags = [
         "-label kbfs"
+        "-mount-type normal"
       ];
     };
+    keybase.enable = true;
 
     pcscd.enable = true;
 
-    #postgresql = {
-    #  enable = true;
-    #  enableTCPIP = true;
-    #};
+    postgresql = {
+      enable = true;
+      enableTCPIP = true;
+    };
 
     #synergy.client = {
     #  enable = true;
@@ -199,7 +200,7 @@ in {
       enable = true;
       screenName = "honmaya";
       address = "192.168.1.3";
-      autoStart = true;
+      autoStart = false;
     };
 
     xserver = {
@@ -297,9 +298,9 @@ in {
   system.autoUpgrade.channel = https://nixos.org/channels/nixos-17.09;
   system.stateVersion = "17.09";
 
-  nix.gc.automatic = true;
-  nix.gc.dates = "weekly";
-  nix.gc.options = "--delete-older-than 30d";
+  #nix.gc.automatic = true;
+  #nix.gc.dates = "weekly";
+  #nix.gc.options = "--delete-older-than 30d";
 
   nix.binaryCaches = [ "https://cache.nixos.org" "https://nixcache.reflex-frp.org" ];
   nix.binaryCachePublicKeys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
