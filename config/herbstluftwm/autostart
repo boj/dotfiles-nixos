@@ -13,12 +13,12 @@ xsetroot -solid '#000000'
 # defaults
 pkill unclutter
 unclutter -idle 2 -root &
-#pkill synergyc
-#synergyc ahoyana
 xmodmap ~/.Xmodmap
 setxkbmap jp
 xset r rate 200 20
 sh .fehbg
+pkill synergys
+synergys -f -c /etc/synergy-server.conf -a 192.168.1.3 -n honmaya
 
 #pkill polybar
 #if type "xrandr"; then
@@ -187,7 +187,7 @@ hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
 # unlock, just to be sure
 hc unlock
 
-herbstclient set tree_style '╾│ ├└╼─┐'
+herbstclient set tree_style 'â•¾â”‚ â”œâ””â•¼â”€â”'
 
 # do multi monitor setup here, e.g.:
 # hc set_monitors 1280x1024+0+0 1280x1024+1280+0
