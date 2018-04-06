@@ -14,7 +14,8 @@ xsetroot -solid '#000000'
 pkill unclutter
 unclutter -idle 2 -root &
 xmodmap ~/.Xmodmap
-setxkbmap jp
+setxkbmap -layout us
+setxkbmap us
 xset r rate 200 20
 sh .fehbg
 pkill synergys
@@ -45,7 +46,7 @@ hc keybind $Mod-Shift-c close
 hc keybind $Mod-Shift-Return spawn ${TERMINAL:-urxvt}
 
 # custom
-hc keybind $Mod-p spawn dmenu_run
+hc keybind $Mod-p spawn rofi -show run # spawn dmenu_run
 hc keybind $Mod-Control-y spawn xbacklight -set 10
 hc keybind $Mod-Control-u spawn xbacklight -dec 10
 hc keybind $Mod-Control-i spawn xbacklight -inc 10
@@ -188,6 +189,9 @@ hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
 hc unlock
 
 herbstclient set tree_style 'â•¾â”‚ â”œâ””â•¼â”€â”'
+
+# fix monitors
+xrandr --output eDP1 --mode 1920x1080 --rate 59.98 --primary --output DP1-1 --left-of eDP1 --mode 1920x1080 --rate 60.00
 
 # do multi monitor setup here, e.g.:
 # hc set_monitors 1280x1024+0+0 1280x1024+1280+0

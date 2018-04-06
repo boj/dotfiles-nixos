@@ -1,4 +1,4 @@
-#colorscheme dracula
+colorscheme dracula
 
 set-option global ui_options ncurses_assistant=cat
 
@@ -6,7 +6,7 @@ set global tabstop 2
 set global indentwidth 2
 
 # replace ¥ with \
-hook global InsertChar ¥ %{ exec -draft -itersel <esc>hr\\i }
+hook global InsertChar Â¥ %{ exec -draft -itersel <esc>hr\\i }
 
 # replace tab with spaces
 hook global InsertChar \t %{ exec -draft -itersel h@ }
@@ -14,10 +14,20 @@ hook global InsertChar \t %{ exec -draft -itersel h@ }
 # highlight 80th column background gray
 hook global WinCreate .* %{
   add-highlighter global column 80 default,rgb:404040
+  add-highlighter global column 120 default,rgb:307CFF
+}
+
+
+hook global BufCreate .*/*.mk %{
+  set-option buffer filetype makefile
 }
 
 hook global WinSetOption filetype=haskell %{
   set window lintcmd 'hlint'
+}
+
+hook global WinSetOption filetype=makefile %{
+  set buffer indentwidth 0
 }
 
 hook global NormalKey y|d|c %{ nop %sh{

@@ -7,6 +7,8 @@ set -x EDITOR kak
 
 set -x FZF_DEFAULT_COMMAND 'fd --type f'
 
+set -x NIX_SKIP_KEYBASE_CHECKS 1
+
 function fzfe
   fzf | read -l r ; and kak $r
 end

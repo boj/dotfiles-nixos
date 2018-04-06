@@ -26,6 +26,7 @@ in {
   boot.loader.systemd-boot.enable = true;
 
   networking = {
+    # 24800 - Synergy
     firewall = {
       enable = true;
       allowedTCPPorts = [ 24800 ];
@@ -36,9 +37,11 @@ in {
     wireless.enable = true;
   };
 
+  sound.enable = true;
+
   i18n = {
     consoleFont = "Lat2-Terminus16";
-    consoleKeyMap = "jp106";
+    consoleKeyMap = "us";
     defaultLocale = "en_US.UTF-8";
   };
 
@@ -46,9 +49,9 @@ in {
 
   nixpkgs.config = {
     allowUnfree = true;
-    permittedInsecurePackages = [
-      "webkitgtk-u.4.11"
-    ];
+    #permittedInsecurePackages = [
+    #  "webkitgtk-u.4.11"
+    #];
     pulseaudio = true;
   };
 
@@ -60,7 +63,7 @@ in {
 
     # virtualization
     docker_compose
-    habitat
+    # habitat
     open-vm-tools
     synergy
     vagrant
@@ -77,11 +80,16 @@ in {
     steam
 
     # network
+    google-drive-ocamlfuse
     openconnect
     openfortivpn
 
+    # devops
+    vault
+
     # development
     git
+    emacs
 
     # haskell
     (haskellPackages.ghcWithPackages (self : [
@@ -125,21 +133,24 @@ in {
     weechat
 
     # work
-    libreoffice
+    # libreoffice
 
     # wm
     dmenu
     feh
     libnotify
     notify-osd
+    rofi
 
     # utils
     acpi
     aspell
     aspellDicts.en
     bind
+    bmon
     curl
     fd
+    file
     fzf
     ghostscript
     htop
@@ -161,8 +172,10 @@ in {
     xsel
 
     # unstable
+    unstable.chromium
     unstable.discord
     unstable.firefox
+    unstable.postman
     unstable.slack
     unstable.zoom-us
   ];
@@ -184,10 +197,19 @@ in {
 
     pcscd.enable = true;
 
-    postgresql = {
-      enable = true;
-      enableTCPIP = true;
-    };
+    #postgresql = {
+    #  enable = true;
+    #  enableTCPIP = true;
+    #  authentication = pkgs.lib.mkOverride 10 ''
+    #    local all all trust
+    #    host all all ::1/128 trust
+    #  '';
+    #  initialScript = pkgs.writeText "backend-initScript" ''
+    #    CREATE ROLE admin WITH LOGIN PASSWORD 'admin' SUPERUSER;
+    #    CREATE DATABASE admin;
+    #    GRANT ALL PRIVILEGES ON DATABASE admin TO admin;
+    #  '';
+    #};
 
     #synergy.client = {
     #  enable = true;
@@ -205,9 +227,10 @@ in {
 
     xserver = {
       enable = true;
-      layout = "jp";
-      videoDrivers = [ "nv" "intel" ];
-      xrandrHeads = [ "HDMI2" "eDP1" ];
+      exportConfiguration = true;
+      layout = "us";
+      videoDrivers = [ "intel" ];
+      xrandrHeads = [ "DP1-1" "eDP1" ];
       windowManager.default = "herbstluftwm";
       windowManager.herbstluftwm = {
         enable = true;
@@ -233,10 +256,10 @@ in {
           xscreensaver -no-splash &
         '';
       };
-      xautolock = {
-        enable = true;
-        locker = "xscreensaver-command --lock";
-      };
+      #xautolock = {
+      #  enable = true;
+      #  locker = "xscreensaver-command --lock";
+      #};
     };
 
     udev.packages = [
@@ -245,10 +268,10 @@ in {
     ];
   };
 
-  i18n.inputMethod = {
-    enabled = "fcitx";
-    fcitx.engines = with pkgs.fcitx-engines; [ mozc ];
-  };
+  # i18n.inputMethod = {
+  #   enabled = "fcitx";
+  #   fcitx.engines = with pkgs.fcitx-engines; [ mozc ];
+  # };
 
   programs = {
     fish.enable = true;
@@ -295,8 +318,8 @@ in {
   };
 
   system.autoUpgrade.enable = true;
-  system.autoUpgrade.channel = https://nixos.org/channels/nixos-17.09;
-  system.stateVersion = "17.09";
+  system.autoUpgrade.channel = https://nixos.org/channels/nixos-18.03;
+  system.stateVersion = "18.03";
 
   #nix.gc.automatic = true;
   #nix.gc.dates = "weekly";
