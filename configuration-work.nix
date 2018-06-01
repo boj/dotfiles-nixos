@@ -9,7 +9,13 @@ in {
     ];
 
   hardware = {
-    bluetooth.enable = true;
+    bluetooth = {
+      enable = true;
+      extraConfig = "
+        [General]
+        Enable=Source,Sink,Media,Socket
+      ";
+    };
     opengl.driSupport32Bit = true;
     pulseaudio = {
       support32Bit = true;
@@ -24,6 +30,22 @@ in {
     preLVM = true;
   } ];
   boot.loader.systemd-boot.enable = true;
+
+  # windows in qemu
+  boot.kernelParams = [ "modprobe.blacklist=nouveau" "quiet" "intel_iommu=on" "iommu=1" ];
+  boot.initrd.kernelModules =
+    [ "vfio"
+      "vfio_iommu_type1"
+      "vfio_pci" 
+      "vfio_virqfd" 
+      "vhost-net" 
+    ];
+  boot.extraModprobeConfig = "options vfio-pci ids=10de:137b";
+  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd.qemuVerbatimConfig = ''
+    nvram = [ "/home/bojo/Downloads/OVMF.fd:/home/bojo/Downloads/OVMF_VARS.fd" ]
+  '';
+  users.groups.libvirtd.members = [ "root" "bojo" ];
 
   networking = {
     # 24800 - Synergy
@@ -53,6 +75,15 @@ in {
     #  "webkitgtk-u.4.11"
     #];
     pulseaudio = true;
+    packageOverrides = super: let self = super.pkgs; in {
+      ncmpcpp = super.ncmpcpp.override { visualizerSupport = true; clockSupport = true; };
+      weechat = super.weechat.override {configure = {availablePlugins, ...}: {
+        plugins = with availablePlugins; [
+            (python.withPackages (ps: with ps; [ websocket_client ]))
+          ];
+        };
+      };
+    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -63,14 +94,17 @@ in {
 
     # virtualization
     docker_compose
-    # habitat
+    libvirt
     open-vm-tools
+    OVMF
+    qemu
     synergy
     vagrant
 
     # audio
     # alsaTools
     # alsaUtils
+    blueman
     pavucontrol
 
     # video
@@ -85,22 +119,19 @@ in {
     openfortivpn
 
     # devops
+    # habitat
     vault
 
     # development
     git
     emacs
+    postman
 
     # haskell
     (haskellPackages.ghcWithPackages (self : [
-       self.alex
-       self.apply-refact
        (pkgs.haskell.lib.dontCheck self.dbmigrations-postgresql)
        self.ghcid
-       self.happy
        self.hledger
-       self.hlint
-       self.xmobar
     ]))
     cabal2nix
     cabal-install
@@ -147,37 +178,51 @@ in {
     aspell
     aspellDicts.en
     bind
-    bmon
+    conky
     curl
-    fd
-    file
-    fzf
     ghostscript
-    htop
-    iftop
     imagemagick
     neofetch
+    pciutils
     qpdfview
     scrot
-    tree
     unclutter
     w3m
     wget
     wpa_supplicant_gui
     xclip
+
+    # file utils
+    fd
+    file
+    fzf
+    tree
+
+    # visual utils
+    bmon
+    htop
+    iftop
+
+    # xorg
     xorg.xbacklight
     xorg.xev
     xorg.xmodmap
     xscreensaver
     xsel
 
+    # browser
+    qutebrowser
+
+    # music
+    ncmpcpp
+
     # unstable
     unstable.chromium
     unstable.discord
     unstable.firefox
-    unstable.postman
     unstable.slack
-    unstable.zoom-us
+    unstable.unity3d
+    zoom-us
   ];
 
   powerManagement.enable = true;
@@ -194,6 +239,16 @@ in {
       ];
     };
     keybase.enable = true;
+
+    mopidy = {
+      enable = true;
+      extensionPackages = [ pkgs.mopidy-soundcloud ];
+      configuration = ''
+        [soundcloud]
+        auth_token = 1-35204-4583239-4b48455dc82a7499
+        explore_songs = 50
+      '';
+    };
 
     pcscd.enable = true;
 
@@ -236,13 +291,6 @@ in {
         enable = true;
         configFile = "/home/bojo/.config/herbstluftwm/autostart";
       };
-      #windowManager.default = "xmonad";
-      #windowManager.xmonad = {
-      #  enable = true;
-      #  enableContribAndExtras = true;
-      #  #extraPackages = haskellPackages: [
-      #  #];
-      #};
       desktopManager = {
         xterm.enable = false;
         default = "none";
@@ -268,10 +316,11 @@ in {
     ];
   };
 
-  # i18n.inputMethod = {
-  #   enabled = "fcitx";
-  #   fcitx.engines = with pkgs.fcitx-engines; [ mozc ];
-  # };
+  i18n.inputMethod = {
+    # Japanese
+    enabled = "fcitx";
+    fcitx.engines = with pkgs.fcitx-engines; [ mozc ];
+  };
 
   programs = {
     fish.enable = true;
@@ -305,15 +354,15 @@ in {
     ];
   };
 
-  virtualisation = {
-    docker.enable = true;
-    virtualbox.host.enable = true;
-  };
+  security.chromiumSuidSandbox.enable = true;
+
+  virtualisation.docker.enable = true;
+  virtualisation.virtualbox.host.enable = true;
 
   users.defaultUserShell = "/run/current-system/sw/bin/fish";
   users.extraUsers.bojo = {
     isNormalUser = true;
-    extraGroups = ["wheel" "input" "audio" "video" "docker"];
+    extraGroups = ["wheel" "input" "audio" "video" "docker" "libvirt" "kvm"];
     uid = 1000;
   };
 
