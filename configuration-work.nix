@@ -32,19 +32,21 @@ in {
   boot.loader.systemd-boot.enable = true;
 
   # windows in qemu
-  boot.kernelParams = [ "modprobe.blacklist=nouveau" "quiet" "intel_iommu=on" "iommu=1" ];
+  boot.kernelParams = [ "modprobe.blacklist=nouveau" "quiet" "intel_iommu=on" "iommu=pt" ];
   boot.initrd.kernelModules =
-    [ "vfio"
+    [ "vfio_pci"
+      "vfio" 
       "vfio_iommu_type1"
-      "vfio_pci" 
       "vfio_virqfd" 
-      "vhost-net" 
     ];
-  boot.extraModprobeConfig = "options vfio-pci ids=10de:137b";
-  virtualisation.libvirtd.enable = true;
-  virtualisation.libvirtd.qemuVerbatimConfig = ''
-    nvram = [ "/home/bojo/Downloads/OVMF.fd:/home/bojo/Downloads/OVMF_VARS.fd" ]
-  '';
+  boot.extraModprobeConfig = "options vfio-pci ids=10de:137b,8086:9d71";
+  virtualisation.libvirtd = {
+    enable = true;
+    qemuOvmf = true;
+    qemuVerbatimConfig = ''
+      nvram = [ "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd" ]
+    '';
+  };
   users.groups.libvirtd.members = [ "root" "bojo" ];
 
   networking = {
@@ -100,6 +102,7 @@ in {
     qemu
     synergy
     vagrant
+    virtmanager
 
     # audio
     # alsaTools
@@ -132,6 +135,7 @@ in {
        (pkgs.haskell.lib.dontCheck self.dbmigrations-postgresql)
        self.ghcid
        self.hledger
+       self.hlint
     ]))
     cabal2nix
     cabal-install
@@ -163,8 +167,9 @@ in {
     python27Packages.rainbowstream
     weechat
 
-    # work
+    # writing
     # libreoffice
+    ghostwriter
 
     # wm
     dmenu
@@ -252,19 +257,19 @@ in {
 
     pcscd.enable = true;
 
-    #postgresql = {
-    #  enable = true;
-    #  enableTCPIP = true;
-    #  authentication = pkgs.lib.mkOverride 10 ''
-    #    local all all trust
-    #    host all all ::1/128 trust
-    #  '';
-    #  initialScript = pkgs.writeText "backend-initScript" ''
-    #    CREATE ROLE admin WITH LOGIN PASSWORD 'admin' SUPERUSER;
-    #    CREATE DATABASE admin;
-    #    GRANT ALL PRIVILEGES ON DATABASE admin TO admin;
-    #  '';
-    #};
+    postgresql = {
+      enable = true;
+      enableTCPIP = true;
+      authentication = pkgs.lib.mkOverride 10 ''
+        local all all trust
+        host all all ::1/128 trust
+      '';
+      initialScript = pkgs.writeText "backend-initScript" ''
+        CREATE ROLE admin WITH LOGIN PASSWORD 'admin' SUPERUSER;
+        CREATE DATABASE admin;
+        GRANT ALL PRIVILEGES ON DATABASE admin TO admin;
+      '';
+    };
 
     #synergy.client = {
     #  enable = true;
@@ -346,6 +351,7 @@ in {
       hasklig
       iosevka
       ipafont
+      libre-baskerville
       material-icons
       nerdfonts
       powerline-fonts

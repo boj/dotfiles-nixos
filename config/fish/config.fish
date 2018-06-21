@@ -3,11 +3,14 @@ set -x PATH $PATH $HOME/.local/bin
 set -x LC_ALL en_US.UTF-8
 set -x LANG en_US.UTF-8
 
+set -x BROWSER qutebrowser
 set -x EDITOR kak
 
 set -x FZF_DEFAULT_COMMAND 'fd --type f'
 
 set -x NIX_SKIP_KEYBASE_CHECKS 1
+
+alias vim="kak"
 
 function fzfe
   fzf | read -l r ; and kak $r
