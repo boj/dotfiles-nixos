@@ -31,3 +31,7 @@ if status --is-interactive
   cd
   neofetch
 end
+
+# Theme
+
+set -g theme_project_dir_length 1

@@ -21,6 +21,7 @@ in {
       support32Bit = true;
       enable = true;
       package = pkgs.pulseaudioFull;
+      #package = pkgs.pulseaudio.override { jackaudioSupport = true; };
     };
   };
 
@@ -33,6 +34,7 @@ in {
 
   # windows in qemu
   boot.kernelParams = [ "modprobe.blacklist=nouveau" "quiet" "intel_iommu=on" "iommu=pt" ];
+  boot.kernelModules = [ "snd-seq" "snd-rawmidi" ];
   boot.initrd.kernelModules =
     [ "vfio_pci"
       "vfio" 
@@ -40,13 +42,13 @@ in {
       "vfio_virqfd" 
     ];
   boot.extraModprobeConfig = "options vfio-pci ids=10de:137b,8086:9d71";
-  virtualisation.libvirtd = {
-    enable = true;
-    qemuOvmf = true;
-    qemuVerbatimConfig = ''
-      nvram = [ "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd" ]
-    '';
-  };
+  #virtualisation.libvirtd = {
+  #  enable = true;
+  #  qemuOvmf = true;
+  #  qemuVerbatimConfig = ''
+  #    nvram = [ "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd" ]
+  #  '';
+  #};
   users.groups.libvirtd.members = [ "root" "bojo" ];
 
   networking = {
@@ -95,14 +97,14 @@ in {
     usbutils
 
     # virtualization
-    docker_compose
-    libvirt
+    #docker_compose
+    #libvirt
     open-vm-tools
-    OVMF
-    qemu
-    synergy
-    vagrant
-    virtmanager
+    #OVMF
+    #qemu
+    #synergy
+    #vagrant
+    #virtmanager
 
     # audio
     # alsaTools
@@ -118,16 +120,14 @@ in {
 
     # network
     google-drive-ocamlfuse
-    openconnect
     openfortivpn
 
     # devops
     # habitat
-    vault
+    # vault
 
     # development
     git
-    emacs
     postman
 
     # haskell
@@ -146,8 +146,10 @@ in {
     gnupg
     libu2f-host
     opensc
+    (unstable.pass.withExtensions (ext: with ext; [ pass-audit pass-otp pass-tomb pass-import pass-update ]))
     pcsctools
     pinentry_ncurses
+    yubikey-manager
     yubikey-personalization
 
     kbfs
@@ -157,7 +159,9 @@ in {
     # terminal
     bash
     fish
+    ranger
     rxvt_unicode
+    termite
 
     # font
     xfontsel
@@ -222,11 +226,11 @@ in {
     ncmpcpp
 
     # unstable
-    unstable.chromium
-    unstable.discord
+    #unstable.chromium
+    #unstable.discord
     unstable.firefox
     unstable.slack
-    unstable.unity3d
+    #unstable.unity3d
     zoom-us
   ];
 
@@ -245,15 +249,15 @@ in {
     };
     keybase.enable = true;
 
-    mopidy = {
-      enable = true;
-      extensionPackages = [ pkgs.mopidy-soundcloud ];
-      configuration = ''
-        [soundcloud]
-        auth_token = 1-35204-4583239-4b48455dc82a7499
-        explore_songs = 50
-      '';
-    };
+    #mopidy = {
+    #  enable = true;
+    #  extensionPackages = [ pkgs.mopidy-soundcloud ];
+    #  configuration = ''
+    #    [soundcloud]
+    #    auth_token = 1-35204-4583239-4b48455dc82a7499
+    #    explore_songs = 50
+    #  '';
+    #};
 
     pcscd.enable = true;
 
@@ -278,12 +282,12 @@ in {
     #  serverAddress = "192.168.1.2:24800";
     #};
 
-    synergy.server = {
-      enable = true;
-      screenName = "honmaya";
-      address = "192.168.1.3";
-      autoStart = false;
-    };
+    #synergy.server = {
+    #  enable = true;
+    #  screenName = "honmaya";
+    #  address = "192.168.1.3";
+    #  autoStart = false;
+    #};
 
     xserver = {
       enable = true;
@@ -360,9 +364,9 @@ in {
     ];
   };
 
-  security.chromiumSuidSandbox.enable = true;
+  #security.chromiumSuidSandbox.enable = true;
 
-  virtualisation.docker.enable = true;
+  #virtualisation.docker.enable = true;
   virtualisation.virtualbox.host.enable = true;
 
   users.defaultUserShell = "/run/current-system/sw/bin/fish";

@@ -25,7 +25,7 @@ URxvt.secondaryScroll: 0
 ! Links
 URxvt.url-launcher: /run/current-system/sw/bin/xdg-open
 URxvt.matcher.button: 1
-URxvt.urlLauncher: firefox
+URxvt.urlLauncher: qutebrowser
  
 ! Fonts
 URxvt.allow_bold: false
@@ -50,60 +50,43 @@ URxvt.iso14755_52: false
 URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
 URxvt.keysym.Shift-Control-V: eval:paste_clipboard
 
-! Dracula Xresources palette
-! *.foreground: #F8F8F2
-! *.background: #282A36
-! *.color0:     #000000
-! *.color8:     #4D4D4D
-! *.color1:     #FF5555
-! *.color9:     #FF6E67
-! *.color2:     #50FA7B
-! *.color10:    #5AF78E
-! *.color3:     #F1FA8C
-! *.color11:    #F4F99D
-! *.color4:     #BD93F9
-! *.color12:    #CAA9FA
-! *.color5:     #FF79C6
-! *.color13:    #FF92D0
-! *.color6:     #8BE9FD
-! *.color14:    #9AEDFE
-! *.color7:     #BFBFBF
-! *.color15:    #E6E6E6
+! Theme
+! special
+*.foreground:   #ffffff
+*.background:   #111111
+*.cursorColor:  #ffffff
+! black
+*.color0:       #131313
+*.color8:       #d1d1d1
+! red
+*.color1:       #2d2d2d
+*.color9:       #d2c3ad
+! green
+*.color2:       #4c3a3d
+*.color10:      #df9767
+! yellow
+*.color3:       #4e4e4e
+*.color11:      #e1e1e1
+! blue
+*.color4:       #6f6f6f
+*.color12:      #ededed
+! magenta
+*.color5:       #909090
+*.color13:      #ed4b19
+! cyan
+*.color6:       #aaa998
+*.color14:      #f2361e
+! white
+*.color7:       #b1b1b1
+*.color15:      #fa390f
 
-
-! -----------------------------------------------------------------------------
-! File: gruvbox-dark.xresources
-! Description: Retro groove colorscheme generalized
-! Author: morhetz <morhetz@gmail.com>
-! Source: https://github.com/morhetz/gruvbox-generalized
-! Last Modified: 6 Sep 2014
-! -----------------------------------------------------------------------------
-
-! hard contrast: *background: #1d2021
-*background: #282828
-! soft contrast: *background: #32302f
-*foreground: #ebdbb2
-! Black + DarkGrey
-*color0:  #282828
-*color8:  #928374
-! DarkRed + Red
-*color1:  #cc241d
-*color9:  #fb4934
-! DarkGreen + Green
-*color2:  #98971a
-*color10: #b8bb26
-! DarkYellow + Yellow
-*color3:  #d79921
-*color11: #fabd2f
-! DarkBlue + Blue
-*color4:  #458588
-*color12: #83a598
-! DarkMagenta + Magenta
-*color5:  #b16286
-*color13: #d3869b
-! DarkCyan + Cyan
-*color6:  #689d6a
-*color14: #8ec07c
-! LightGrey + White
-*color7:  #a89984
-*color15: #ebdbb2
+! Rofi
+rofi.color-enabled: true
+rofi.color-window: #101010, #F2361E, #F2361E
+rofi.color-normal: #101010, #ffffff, #181818, #F2361E, #ffffff
+rofi.color-active: #101010, #F2361E, #181818, #F2361E, #ffffff
+rofi.color-urgent: #101010, #f3843d, #181818, #F2361E, #ffc39c
+rofi.font: Terminess Powerline 8
+rofi.bw: 2
+rofi.width: -80
+rofi.scroll-method: 1

@@ -1,4 +1,4 @@
-colorscheme gruvbox
+colorscheme red-phoenix
 
 set-option global ui_options ncurses_assistant=cat
 
@@ -15,7 +15,7 @@ hook global BufCreate .*/*.mk %{
 hook global WinSetOption filetype=haskell %{
   set window lintcmd 'hlint'
   add-highlighter global column 80 default,rgb:404040
-  add-highlighter global column 120 default,rgb:8ec07c
+  add-highlighter global column 120 default,rgb:565656
 }
 
 hook global WinSetOption filetype=makefile %{
