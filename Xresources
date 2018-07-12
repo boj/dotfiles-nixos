@@ -20,7 +20,7 @@ URxvt.secondaryScreen: 1
 URxvt.secondaryScroll: 0
 
 ! Perl extensions
-! URxvt.perl-ext-common: default,matcher,clipboard
+URxvt.perl-ext-common: common, -searchable-scrollback
 
 ! Links
 URxvt.url-launcher: /run/current-system/sw/bin/xdg-open
@@ -49,6 +49,9 @@ URxvt.iso14755_52: false
 ! Enables copy/paste with Ctrl-Shift-C/V
 URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
 URxvt.keysym.Shift-Control-V: eval:paste_clipboard
+
+! xst
+st.font: Knack Nerd Font:style=Regular:pixelsize=12:antialias=true:autohint=true
 
 ! Theme
 ! special
@@ -86,7 +89,7 @@ rofi.color-window: #101010, #F2361E, #F2361E
 rofi.color-normal: #101010, #ffffff, #181818, #F2361E, #ffffff
 rofi.color-active: #101010, #F2361E, #181818, #F2361E, #ffffff
 rofi.color-urgent: #101010, #f3843d, #181818, #F2361E, #ffc39c
-rofi.font: Terminess Powerline 8
+rofi.font: Terminess Powerline 10
 rofi.bw: 2
 rofi.width: -80
 rofi.scroll-method: 1

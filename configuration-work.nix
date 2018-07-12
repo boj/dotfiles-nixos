@@ -161,7 +161,7 @@ in {
     fish
     ranger
     rxvt_unicode
-    termite
+    xst
 
     # font
     xfontsel

@@ -2,9 +2,8 @@
 ## Red Phoenix (dkeg) - adapted by boj
 ##
 
-%sh{
+evaluate-commands %sh{
     black="rgb:000000"
-    red="rgb:cc6666"
     blue="rgb:81a2be"
 
     orange1="rgb:F2361E"
@@ -25,7 +24,7 @@
 
     foreground=${white1}
     background=${black}
-    selection=${tan3}
+    selection=${purple1}
     window=${gray3}
     text=${white2}
     text_light=${white1}
@@ -34,56 +33,56 @@
 
     ## code
     echo "
-        face value ${orange2}
-        face type ${gray2}
-        face variable ${orange1}
-        face module ${gray2}
-        face function ${yellow1}
-        face string ${tan2}
-        face keyword ${light_orange1}
-        face operator ${yellow1}
-        face attribute ${tan1}
-        face comment ${gray1}
-        face meta ${gray2}
-        face builtin ${tan1}
+        face global value ${orange2}
+        face global type ${gray2}
+        face global variable ${orange1}
+        face global module ${gray2}
+        face global function ${yellow1}
+        face global string ${tan2}
+        face global keyword ${light_orange1}
+        face global operator ${yellow1}
+        face global attribute ${tan1}
+        face global comment ${gray1}
+        face global meta ${gray2}
+        face global builtin ${tan1}
     "
 
     ## markup
     echo "
-        face title blue
-        face header ${orange1}
-        face bold ${orange2}
-        face italic ${orange3}
-        face mono ${yellow1}
-        face block ${tan1}
-        face link blue
-        face bullet ${gray1}
-        face list ${gray1}
+        face global title blue
+        face global header ${orange1}
+        face global bold ${orange2}
+        face global italic ${orange3}
+        face global mono ${yellow1}
+        face global block ${tan1}
+        face global link blue
+        face global bullet ${gray1}
+        face global list ${gray1}
     "
 
     ## builtin
     echo "
-        face Default ${text},${background}
-        face PrimarySelection default,${selection}
-        face SecondarySelection default,${selection}
-        face PrimaryCursor black,${tan1}
-        face SecondaryCursor black,${tan2}
-        face PrimaryCursorEol black,${orange2}
-        face SecondaryCursorEol black,${orange2}
-        face LineNumbers ${text_light},${background}
-        face LineNumberCursor ${text},${gray1}+b
-        face MenuForeground ${text_light},blue
-        face MenuBackground ${orange1},${window}
-        face MenuInfo ${gray1}
-        face Information white,${window}
-        face Error white,${red}
-        face StatusLine ${text},${window}
-        face StatusLineMode ${yellow1}+b
-        face StatusLineInfo ${orange2}
-        face StatusLineValue ${orange2}
-        face StatusCursor ${window},${orange2}
-        face Prompt ${background},${orange2}
-        face MatchingChar ${orange3},${background}+b
-        face BufferPadding ${orange2},${background}
+        face global Default ${text},${background}
+        face global PrimarySelection default,${selection}
+        face global SecondarySelection default,${selection}
+        face global PrimaryCursor black,${tan1}
+        face global SecondaryCursor black,${tan2}
+        face global PrimaryCursorEol black,${orange1}
+        face global SecondaryCursorEol black,${orange2}
+        face global LineNumbers ${text_light},${background}
+        face global LineNumberCursor ${text},${gray1}+b
+        face global MenuForeground ${text_light},blue
+        face global MenuBackground ${orange1},${window}
+        face global MenuInfo ${gray1}
+        face global Information white,${window}
+        face global Error white,${gray1}
+        face global StatusLine ${text},${window}
+        face global StatusLineMode ${yellow1}+b
+        face global StatusLineInfo ${orange2}
+        face global StatusLineValue ${orange2}
+        face global StatusCursor ${window},${orange2}
+        face global Prompt ${background},${orange2}
+        face global MatchingChar ${orange3},${background}+b
+        face global BufferPadding ${orange2},${background}
     "
 }

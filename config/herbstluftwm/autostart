@@ -43,7 +43,7 @@ Mod=Mod4
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
-hc keybind $Mod-Shift-Return spawn ${TERMINAL:-urxvt}
+hc keybind $Mod-Shift-Return spawn ${TERMINAL:-st}
 
 # custom
 hc keybind $Mod-p spawn rofi -show run # spawn dmenu_run
@@ -170,8 +170,8 @@ hc attr theme.floating.reset 1
 
 hc set frame_border_active_color '#F2361E'
 hc set frame_border_normal_color '#000000'
-hc set frame_bg_normal_color '#565656'
-hc set frame_bg_active_color '#345F0C'
+hc set frame_bg_normal_color '#000000'
+hc set frame_bg_active_color '#000000'
 hc set frame_border_width 0
  
 hc set frame_gap 0
