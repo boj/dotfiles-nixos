@@ -52,6 +52,10 @@ in {
   users.groups.libvirtd.members = [ "root" "bojo" ];
 
   networking = {
+    extraHosts = ''
+      172.16.11.39 artifactory.alasconnect.com
+      172.16.11.57 bldr.alasconnect.com
+    '';
     # 24800 - Synergy
     firewall = {
       enable = true;
@@ -71,7 +75,7 @@ in {
     defaultLocale = "en_US.UTF-8";
   };
 
-  time.timeZone = "Asia/Tokyo";
+  time.timeZone = "America/Anchorage";
 
   nixpkgs.config = {
     allowUnfree = true;
@@ -90,6 +94,8 @@ in {
     };
   };
 
+  nix.useSandbox = true;
+
   environment.systemPackages = with pkgs; [
     # system
     gcc
@@ -103,7 +109,7 @@ in {
     #OVMF
     #qemu
     #synergy
-    #vagrant
+    vagrant
     #virtmanager
 
     # audio
@@ -128,18 +134,21 @@ in {
 
     # development
     git
-    postman
+    gitAndTools.hub
+    unstable.postman
 
     # haskell
     (haskellPackages.ghcWithPackages (self : [
        (pkgs.haskell.lib.dontCheck self.dbmigrations-postgresql)
+       # self.arbtt
+       self.brittany
        self.ghcid
        self.hledger
        self.hlint
     ]))
     cabal2nix
-    cabal-install
-    nix-prefetch-git
+    unstable.cabal-install
+    unstable.nix-prefetch-git
     stack
 
     # security
@@ -205,6 +214,7 @@ in {
     fd
     file
     fzf
+    ranger
     tree
 
     # visual utils
@@ -229,6 +239,7 @@ in {
     #unstable.chromium
     #unstable.discord
     unstable.firefox
+    unstable.google-chrome
     unstable.slack
     #unstable.unity3d
     zoom-us
@@ -261,19 +272,19 @@ in {
 
     pcscd.enable = true;
 
-    postgresql = {
-      enable = true;
-      enableTCPIP = true;
-      authentication = pkgs.lib.mkOverride 10 ''
-        local all all trust
-        host all all ::1/128 trust
-      '';
-      initialScript = pkgs.writeText "backend-initScript" ''
-        CREATE ROLE admin WITH LOGIN PASSWORD 'admin' SUPERUSER;
-        CREATE DATABASE admin;
-        GRANT ALL PRIVILEGES ON DATABASE admin TO admin;
-      '';
-    };
+    #postgresql = {
+    #  enable = true;
+    #  enableTCPIP = true;
+    #  authentication = pkgs.lib.mkOverride 10 ''
+    #    local all all trust
+    #    host all all ::1/128 trust
+    #  '';
+    #  initialScript = pkgs.writeText "backend-initScript" ''
+    #    CREATE ROLE admin WITH LOGIN PASSWORD 'admin' SUPERUSER;
+    #    CREATE DATABASE admin;
+    #    GRANT ALL PRIVILEGES ON DATABASE admin TO admin;
+    #  '';
+    #};
 
     #synergy.client = {
     #  enable = true;
@@ -293,8 +304,9 @@ in {
       enable = true;
       exportConfiguration = true;
       layout = "us";
+      #xkbOptions = "ctrl:swapcaps";
       videoDrivers = [ "intel" ];
-      xrandrHeads = [ "DP1-1" "eDP1" ];
+      xrandrHeads = [ "HDMI2" "DP1-3" "DP1-1" "eDP1" ];
       windowManager.default = "herbstluftwm";
       windowManager.herbstluftwm = {
         enable = true;
@@ -346,18 +358,13 @@ in {
     fontconfig.antialias = true;
     fonts = with pkgs; [
       corefonts
-      fira
-      fira-code
-      fira-mono
       font-awesome-ttf
       freefont_ttf
       hack-font
-      hasklig
-      iosevka
       ipafont
       libre-baskerville
       material-icons
-      nerdfonts
+      # nerdfonts
       powerline-fonts
       terminus_font_ttf
       unifont
@@ -376,9 +383,9 @@ in {
     uid = 1000;
   };
 
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.channel = https://nixos.org/channels/nixos-18.03;
-  system.stateVersion = "18.03";
+  #system.autoUpgrade.enable = true;
+  #system.autoUpgrade.channel = https://nixos.org/channels/nixos-18.09;
+  #system.stateVersion = "18.09";
 
   #nix.gc.automatic = true;
   #nix.gc.dates = "weekly";

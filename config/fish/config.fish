@@ -12,6 +12,10 @@ set -x NIX_SKIP_KEYBASE_CHECKS 1
 
 alias vim="kak"
 
+function fish_user_key_bindings
+  fzf_key_bindings
+end
+
 function fzfe
   fzf | read -l r ; and kak $r
 end

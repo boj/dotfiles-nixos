@@ -13,13 +13,14 @@ xsetroot -solid '#000000'
 # defaults
 pkill unclutter
 unclutter -idle 2 -root &
+#pkill arbtt-capture
+#arbtt-capture &
 xmodmap ~/.Xmodmap
-setxkbmap -layout us
-setxkbmap us
+#setxkbmap -layout us -option ctrl:nocaps
 xset r rate 200 20
 sh .fehbg
-pkill synergys
-synergys -f -c ~/.config/synergy/server.conf -a 192.168.1.3 -n honmaya
+#pkill synergys
+#synergys -f -c ~/.config/synergy/server.conf -a 192.168.1.3 -n honmaya
 
 #pkill polybar
 #if type "xrandr"; then
@@ -43,7 +44,7 @@ Mod=Mod4
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
-hc keybind $Mod-Shift-Return spawn ${TERMINAL:-st}
+hc keybind $Mod-Shift-Return spawn ${TERMINAL:-urxvt}
 
 # custom
 hc keybind $Mod-p spawn rofi -show run # spawn dmenu_run
@@ -51,12 +52,15 @@ hc keybind $Mod-Control-y spawn xbacklight -set 10
 hc keybind $Mod-Control-u spawn xbacklight -dec 10
 hc keybind $Mod-Control-i spawn xbacklight -inc 10
 hc keybind $Mod-Control-o spawn xbacklight -set 100
+hc keybind $Mod-Control-m spawn xrandr --output HDMI2 --off
 hc keybind $Mod-Control-1 spawn amixer -q set Master 5%-
 hc keybind $Mod-Control-2 spawn amixer -q set Master 5%+
 hc keybind $Mod-Control-3 spawn scrot
 hc keybind $Mod-Control-4 spawn scrot -u
 hc keybind $Mod-Control-p spawn systemctl suspend
 hc keybind Mod1-Control-l spawn xscreensaver-command --lock
+hc keybind $Mod-Control-b spawn bash -c 'notify-send "Battery State" "`acpi`"'
+hc keybind $Mod-Control-t spawn bash -c 'notify-send "Time" "`date`"'
 
 # basic movement
 # focusing clients
@@ -168,30 +172,22 @@ hc attr theme.floating.reset 1
 #hc attr theme.active.outer_color '#000000'
 #hc attr theme.background_color '#141414'
 
-hc set frame_border_active_color '#F2361E'
-hc set frame_border_normal_color '#000000'
-hc set frame_bg_normal_color '#000000'
-hc set frame_bg_active_color '#000000'
 hc set frame_border_width 0
  
 hc set frame_gap 0
 hc set snap_gap 0
  
-hc attr theme.active.color '#F2361E'
-hc attr theme.normal.color '#EDEDED'
+hc attr theme.active.color '#333333'
+hc attr theme.normal.color '#555555'
 hc attr theme.urgent.color '#6833ff'
 hc attr theme.inner_width 1
-hc attr theme.outer_width 1
+hc attr theme.outer_width 0
 hc attr theme.inner_color black
 hc attr theme.outer_color black
 hc attr theme.border_width 3
  
-hc attr theme.active.inner_color black
-hc attr theme.active.outer_color black
-hc attr theme.background_color '#141414'
-
-hc set window_gap 10
-hc set window_border_width 3
+hc set window_gap 5
+hc set window_border_width 5
 hc set frame_padding 0
 hc set smart_window_surroundings 0
 hc set smart_frame_surroundings 1
@@ -212,7 +208,9 @@ hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
 hc unlock
 
 # fix monitors
-xrandr --output eDP1 --mode 1920x1080 --rate 59.98 --primary --output DP1-1 --left-of eDP1 --mode 1920x1080 --rate 60.00
+xrandr --output eDP1 --auto --mode 1920x1080 --primary \
+  --output HDMI2 --auto --left-of eDP1 --mode 1920x1080 \
+  --output DP1-1 --auto --left-of HDMI2 --mode 1920x1080
 
 # do multi monitor setup here, e.g.:
 # hc set_monitors 1280x1024+0+0 1280x1024+1280+0
