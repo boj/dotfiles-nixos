@@ -8,7 +8,11 @@ Xft.hintstyle: hintslight
  
 URxvt.depth: 32
 URxvt.geometry: 80x24
-URxvt.transparent: false
+! URxvt.transparent: true
+URxvt*background: [80]#000000
+URxvt*foreground: #ffffff
+URxvt.inheritPixmap: true
+URxvt.shading: 30
 URxvt.fading: 0
 ! URxvt.urgentOnBell: true
 ! URxvt.visualBell: true

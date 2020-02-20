@@ -10,6 +10,8 @@ set -x FZF_DEFAULT_COMMAND 'fd --type f'
 
 set -x NIX_SKIP_KEYBASE_CHECKS 1
 
+set -u SSH_ASSPASS
+
 alias vim="kak"
 
 function fish_user_key_bindings
@@ -39,3 +41,8 @@ end
 # Theme
 
 set -g theme_project_dir_length 1
+
+function zoom-hack
+  set -x LIBGL_ALWAYS_SOFTWARE 1
+  zoom-us
+end

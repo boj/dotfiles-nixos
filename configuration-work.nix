@@ -1,7 +1,12 @@
-{ config, pkgs, ... }:
+{ config, pkgs, options, ... }:
 
 let
-  unstable = import <unstable> { config.allowUnfree = true; };
+  unstable = import <unstable> {
+    config = {
+        allowBroken = true;
+        allowUnfree = true;
+      };
+    };
 in {
   imports =
     [
@@ -42,28 +47,30 @@ in {
       "vfio_virqfd" 
     ];
   boot.extraModprobeConfig = "options vfio-pci ids=10de:137b,8086:9d71";
-  #virtualisation.libvirtd = {
-  #  enable = true;
-  #  qemuOvmf = true;
-  #  qemuVerbatimConfig = ''
-  #    nvram = [ "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd" ]
-  #  '';
-  #};
+  virtualisation.libvirtd = {
+    enable = true;
+    qemuOvmf = true;
+    qemuVerbatimConfig = ''
+      nvram = [ "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd" ]
+    '';
+  };
   users.groups.libvirtd.members = [ "root" "bojo" ];
 
   networking = {
-    extraHosts = ''
-      172.16.11.39 artifactory.alasconnect.com
-      172.16.11.57 bldr.alasconnect.com
-    '';
+    # extraHosts = ''
+    #   172.16.11.39 artifactory.alasconnect.com
+    #   172.16.11.57 bldr.alasconnect.com
+    # '';
     # 24800 - Synergy
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [ 24800 ];
-      allowedUDPPorts = [ 24800 ];
-      allowPing = true;
-    };
+    # firewall = {
+    #   enable = true;
+    #   allowedTCPPorts = [ 24800 ];
+    #   allowedUDPPorts = [ 24800 ];
+    #   allowPing = true;
+    # };
     hostName = "honmaya";
+    # nameservers = [ "1.1.1.1" "9.9.9.9" ];
+    timeServers = options.networking.timeServers.default ++ [ "ntp.example.com" ];
     wireless.enable = true;
   };
 
@@ -79,12 +86,9 @@ in {
 
   nixpkgs.config = {
     allowUnfree = true;
-    #permittedInsecurePackages = [
-    #  "webkitgtk-u.4.11"
-    #];
     pulseaudio = true;
     packageOverrides = super: let self = super.pkgs; in {
-      ncmpcpp = super.ncmpcpp.override { visualizerSupport = true; clockSupport = true; };
+      # ncmpcpp = super.ncmpcpp.override { visualizerSupport = true; clockSupport = true; };
       weechat = super.weechat.override {configure = {availablePlugins, ...}: {
         plugins = with availablePlugins; [
             (python.withPackages (ps: with ps; [ websocket_client ]))
@@ -102,48 +106,69 @@ in {
     gnumake
     usbutils
 
+    # keyboard
+    teensy-loader-cli
+
     # virtualization
     #docker_compose
-    #libvirt
+    libvirt
     open-vm-tools
-    #OVMF
-    #qemu
+    OVMF
+    qemu
     #synergy
-    vagrant
-    #virtmanager
+    virtmanager
+    virtviewer
 
     # audio
     # alsaTools
     # alsaUtils
     blueman
+    ncmpcpp
     pavucontrol
 
     # video
     vlc
 
     # games
-    steam
+    crawl
+    tinyfugue
+    #(unstable.steam.override { withPrimus = true; extraPkgs = pkgs: [ bumblebee glxinfo ]; })
 
     # network
     google-drive-ocamlfuse
     openfortivpn
+    remmina
 
     # devops
+    chefdk
     # habitat
-    # vault
+    kubectl
+    packer
+    minikube
+    terraform
+    vagrant
+    vault
 
     # development
+    #android-studio
     git
     gitAndTools.hub
-    unstable.postman
+    kakoune
+    ngrok
+    #unstable.postman
+    #vscode
+ 
+    # rust
+    rustup
 
     # haskell
     (haskellPackages.ghcWithPackages (self : [
-       (pkgs.haskell.lib.dontCheck self.dbmigrations-postgresql)
+       # (pkgs.haskell.lib.dontCheck self.dbmigrations-postgresql)
        # self.arbtt
-       self.brittany
-       self.ghcid
-       self.hledger
+       # self.brittany
+       # self.ghcid
+       self.ghc-core
+       # self.hledger
        self.hlint
     ]))
     cabal2nix
@@ -155,7 +180,7 @@ in {
     gnupg
     libu2f-host
     opensc
-    (unstable.pass.withExtensions (ext: with ext; [ pass-audit pass-otp pass-tomb pass-import pass-update ]))
+    # (unstable.pass.withExtensions (ext: with ext; [ pass-audit pass-otp pass-tomb pass-import pass-update ]))
     pcsctools
     pinentry_ncurses
     yubikey-manager
@@ -170,15 +195,21 @@ in {
     fish
     ranger
     rxvt_unicode
-    xst
+    # xst
 
     # font
     xfontsel
     xlsfonts
  
     # chat
-    python27Packages.rainbowstream
+    # python27Packages.rainbowstream
     weechat
+
+    # speech
+    speechd
+
+    # tasks
+    taskwarrior
 
     # writing
     # libreoffice
@@ -196,18 +227,20 @@ in {
     aspell
     aspellDicts.en
     bind
-    conky
+    binutils
+    #conky
     curl
-    ghostscript
+    #ghostscript
     imagemagick
     neofetch
     pciutils
     qpdfview
     scrot
+    #texlive-combined-small-2017
     unclutter
     w3m
     wget
-    wpa_supplicant_gui
+    # wpa_supplicant_gui
     xclip
 
     # file utils
@@ -215,6 +248,7 @@ in {
     file
     fzf
     ranger
+    sloccount
     tree
 
     # visual utils
@@ -226,29 +260,46 @@ in {
     xorg.xbacklight
     xorg.xev
     xorg.xmodmap
+    xorg.xprop
     xscreensaver
     xsel
 
     # browser
     qutebrowser
+    brave
 
     # music
-    ncmpcpp
+    # ncmpcpp
 
     # unstable
+    unstable._1password
     #unstable.chromium
-    #unstable.discord
+    unstable.discord
     unstable.firefox
     unstable.google-chrome
-    unstable.slack
+    #unstable.ue4
     #unstable.unity3d
-    zoom-us
+    unstable.unityhub
+    unstable.zoom-us
   ];
 
   powerManagement.enable = true;
 
   services = {
     acpid.enable = true;
+
+    blueman.enable = true;
+
+
+    davmail = {
+      enable = true;
+      url = "https://outlook.office365.com/EWS/Exchange.asmx";
+      config = {
+        davmail.enableEws = true;
+        davmail.mode = "EWS";
+        davmail.smtpSaveInSent = true;
+      };
+    };
 
     kbfs = {
       enable = true;
@@ -260,31 +311,40 @@ in {
     };
     keybase.enable = true;
 
-    #mopidy = {
-    #  enable = true;
-    #  extensionPackages = [ pkgs.mopidy-soundcloud ];
-    #  configuration = ''
-    #    [soundcloud]
-    #    auth_token = 1-35204-4583239-4b48455dc82a7499
-    #    explore_songs = 50
-    #  '';
-    #};
+    elasticsearch.enable = true;
+
+    # mopidy = {
+    #   enable = true;
+    #   extensionPackages = [ pkgs.mopidy-soundcloud ];
+    #   configuration = ''
+    #     [soundcloud]
+    #     auth_token = 1-35204-4583239-4b48455dc82a7499
+    #     explore_songs = 50
+    #   '';
+    # };
+
+    ntp.enable = true;
 
     pcscd.enable = true;
 
-    #postgresql = {
-    #  enable = true;
-    #  enableTCPIP = true;
-    #  authentication = pkgs.lib.mkOverride 10 ''
-    #    local all all trust
-    #    host all all ::1/128 trust
-    #  '';
-    #  initialScript = pkgs.writeText "backend-initScript" ''
-    #    CREATE ROLE admin WITH LOGIN PASSWORD 'admin' SUPERUSER;
-    #    CREATE DATABASE admin;
-    #    GRANT ALL PRIVILEGES ON DATABASE admin TO admin;
-    #  '';
-    #};
+    postgresql = {
+      enable = true;
+      enableTCPIP = true;
+      authentication = pkgs.lib.mkOverride 10 ''
+        local all all trust
+        host all all ::1/128 trust
+      '';
+      initialScript = pkgs.writeText "backend-initScript" ''
+        CREATE ROLE admin WITH LOGIN PASSWORD 'admin' SUPERUSER;
+        CREATE DATABASE admin;
+        GRANT ALL PRIVILEGES ON DATABASE admin TO admin;
+      '';
+    };
+
+    printing.enable = true;
+    printing.drivers = [ pkgs.gutenprint pkgs.gutenprintBin ];
+
+    redis.enable = true;
 
     #synergy.client = {
     #  enable = true;
@@ -307,6 +367,10 @@ in {
       #xkbOptions = "ctrl:swapcaps";
       videoDrivers = [ "intel" ];
       xrandrHeads = [ "HDMI2" "DP1-3" "DP1-1" "eDP1" ];
+      #windowManager.default = "awesome";
+      #windowManager.awesome = {
+      #  enable = true;
+      #};
       windowManager.default = "herbstluftwm";
       windowManager.herbstluftwm = {
         enable = true;
@@ -373,13 +437,16 @@ in {
 
   #security.chromiumSuidSandbox.enable = true;
 
-  #virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    extraOptions = "--experimental=true";
+  };
   virtualisation.virtualbox.host.enable = true;
 
   users.defaultUserShell = "/run/current-system/sw/bin/fish";
   users.extraUsers.bojo = {
     isNormalUser = true;
-    extraGroups = ["wheel" "input" "audio" "video" "docker" "libvirt" "kvm"];
+    extraGroups = ["wheel" "input" "audio" "video" "docker" "libvirtd" "kvm" "vboxusers"];
     uid = 1000;
   };
 
